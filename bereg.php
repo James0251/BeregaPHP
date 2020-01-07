@@ -21,20 +21,21 @@ $params = [
 //Адрес страницы, откуда будем парсить, включая все вышенаписанные параметры
 $url = 'https://api.vk.com/method/wall.get?'. http_build_query($params);
 $response = file_get_contents($url);
-//var_dump(json_decode($data));
+
 $post_count = json_decode($response,true);
-//print_r($post_count);
+
 while ($offset < $post_count) {
     $url = 'https://api.vk.com/method/wall.get?'. http_build_query($params);
     $response = file_get_contents($url);
     $offset += 100;
     $data = $post_count['response']['items'];
-    //print_r($data);
+
     foreach($data as $i) {
         $string = $i['text']. '<br/>';
-        print_r($string);
+        $matched_string = preg_match_all('#администрацияТМР#su', $string);
+        if ($matched_string != null) {
+            print_r($string);
+        }
     }
 }
-
-//var_dump($data);
 
